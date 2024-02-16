@@ -1,18 +1,19 @@
-package com.kbtg.bootcamp.posttest.lottery.service;
+package com.kbtg.bootcamp.posttest.lotteries.service;
 
-import com.kbtg.bootcamp.posttest.lottery.entity.Ticket;
-import com.kbtg.bootcamp.posttest.lottery.model.TicketNameResponseDTO;
-import com.kbtg.bootcamp.posttest.lottery.model.TicketRequestDTO;
-import com.kbtg.bootcamp.posttest.lottery.repository.TicketRepository;
-import org.junit.jupiter.api.Assertions;
+import com.kbtg.bootcamp.posttest.exceptions.InternalServerException;
+import com.kbtg.bootcamp.posttest.lotteries.entity.Lottery;
+import com.kbtg.bootcamp.posttest.lotteries.model.TicketNameResponseDTO;
+import com.kbtg.bootcamp.posttest.lotteries.model.TicketRequestDTO;
+import com.kbtg.bootcamp.posttest.lotteries.repository.LotteryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.client.HttpServerErrorException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,29 +21,30 @@ public class LotteryServiceTest {
     @InjectMocks
     private LotteryService lotteryService;
     @Mock
-    private TicketRepository ticketRepository;
+    private LotteryRepository lotteryRepository;
 
     @Test
     @DisplayName("should create a ticket successfully and return the ticket number")
     public void testCreateTicket(){
         TicketRequestDTO ticketRequestDTO = new TicketRequestDTO("123456", 80, 1);
-        Ticket expectedTicket = new Ticket("123456", 80, 1);
+        Lottery expectedLottery = new Lottery("123456", 80, 1);
 
-        when(ticketRepository.save(expectedTicket)).thenReturn(expectedTicket);
+        when(lotteryRepository.save(expectedLottery)).thenReturn(expectedLottery);
 
-        TicketNameResponseDTO actualTicket = lotteryService.create(ticketRequestDTO);
+        TicketNameResponseDTO actualTicket = lotteryService.createTicket(ticketRequestDTO);
 
-        Assertions.assertEquals(expectedTicket.getTicket(), actualTicket.ticket());
+        assertEquals(expectedLottery.getTicket(), actualTicket.ticket());
 
-        verify(ticketRepository.save(expectedTicket), times(1));
+        verify(lotteryRepository, times(1)).save(expectedLottery);
     }
 
     @Test
     @DisplayName("should be fail because you create a ticket already exits")
     public void testCreateDuplicateTicket(){
-        when(ticketRepository.save(any())).thenThrow(new InternalServerException("ticket has already exits"));
+        TicketRequestDTO ticketRequestDTO = new TicketRequestDTO("123456", 80, 1);
+        when(lotteryRepository.save(any())).thenThrow(new InternalServerException("ticket has already exits"));
 
-        when(InternalServerException.class, () -> lotteryService.create(ticketRequestDTO), "ticket has already exits");
-        verify(ticketRepository.save(any()), times(1));
+        assertThrows(InternalServerException.class, () -> lotteryService.createTicket(ticketRequestDTO), "ticket has already exits");
+        verify(lotteryRepository, times(1)).save(any());
     }
 }
