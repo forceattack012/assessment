@@ -14,20 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LotteryController {
-    private final LotteryService lotteryService;
+  private final LotteryService lotteryService;
 
-    public LotteryController(LotteryService lotteryService) {
-        this.lotteryService = lotteryService;
-    }
+  public LotteryController(LotteryService lotteryService) {
+    this.lotteryService = lotteryService;
+  }
 
-    @PostMapping("/admin/lotteries")
-    public ResponseEntity<TicketNameResponseDTO> createTicket(@RequestBody @Validated TicketRequestDTO ticketRequestDTO){
-        TicketNameResponseDTO ticketNameResponseDTO = this.lotteryService.createTicket(ticketRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ticketNameResponseDTO);
-    }
+  @PostMapping("/admin/lotteries")
+  public ResponseEntity<TicketNameResponseDTO> createTicket(
+      @RequestBody @Validated TicketRequestDTO ticketRequestDTO) {
+    TicketNameResponseDTO ticketNameResponseDTO =
+        this.lotteryService.createTicket(ticketRequestDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(ticketNameResponseDTO);
+  }
 
-    @GetMapping("/lotteries")
-    public TicketListResponseDTO findLotteries(){
-        return this.lotteryService.findTicketsAmountMoreThanZero();
-    }
+  @GetMapping("/lotteries")
+  public TicketListResponseDTO findLotteries() {
+    return this.lotteryService.findTicketsAmountMoreThanZero();
+  }
 }
