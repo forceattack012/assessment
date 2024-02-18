@@ -31,8 +31,3 @@ INSERT INTO lotteries(ticket, price, amount) VALUES('000002', 80, 1);
 
 INSERT INTO users(user_id, name) VALUES('0123456789', 'Jim');
 INSERT INTO users(user_id, name) VALUES('1123456789', 'B');
-
---INSERT INTO user_ticket(user_id, ticket) VALUES('0123456789', '000001');
---INSERT INTO user_ticket(user_id, ticket) VALUES('0123456789', '000002');
---INSERT INTO user_ticket(user_id, ticket) VALUES('1123456789', '000001');
---INSERT INTO user_ticket(user_id, ticket) VALUES('1123456789', '000001');
