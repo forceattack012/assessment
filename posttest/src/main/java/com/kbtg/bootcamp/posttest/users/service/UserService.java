@@ -12,12 +12,10 @@ import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
 import com.kbtg.bootcamp.posttest.users.repository.UserTicketRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -64,26 +62,27 @@ public class UserService {
 
   public ReportLotteriesDTO reportLotteriesByUserId(String userId) {
     Optional<User> userOptional = userRepository.findById(userId);
-    if(userOptional.isEmpty()){
+    if (userOptional.isEmpty()) {
       throw new NotFoundException("user not found");
     }
 
-    List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTO = userTicketRepository.findAllTicketByUserId(userId);
+    List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTO =
+        userTicketRepository.findAllTicketByUserId(userId);
 
-    List<String> tickets = getAllTicketByUserIdDTO.stream()
-            .map(GetAllTicketByUserIdDTO::getTicket)
-            .toList();
+    List<String> tickets =
+        getAllTicketByUserIdDTO.stream().map(GetAllTicketByUserIdDTO::getTicket).toList();
     int count = getAllTicketByUserIdDTO.size();
     int totalPrice = calculateTotalPriceOfLotteries(getAllTicketByUserIdDTO);
 
     return new ReportLotteriesDTO(tickets, count, totalPrice);
   }
 
-  private int calculateTotalPriceOfLotteries(List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTO){
-      return getAllTicketByUserIdDTO.stream()
-            .map(GetAllTicketByUserIdDTO::getPrice)
-            .mapToInt(Integer::valueOf)
-            .sum();
+  private int calculateTotalPriceOfLotteries(
+      List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTO) {
+    return getAllTicketByUserIdDTO.stream()
+        .map(GetAllTicketByUserIdDTO::getPrice)
+        .mapToInt(Integer::valueOf)
+        .sum();
   }
 
   private User findUserByUserId(String userId) {

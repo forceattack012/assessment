@@ -24,7 +24,7 @@ public class UserController {
 
   @PostMapping("/{userId}/lotteries/{ticketId}")
   public ResponseEntity<UserBuyLotteryResponseDTO> buyLottery(
-          @PathVariable("userId")
+      @PathVariable("userId")
           @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
           @Pattern(regexp = "[0-9]+", message = "userId must be number only")
           String userId,
@@ -33,16 +33,17 @@ public class UserController {
           @Pattern(regexp = "[0-9]+", message = "ticketId must be number only")
           String ticketId) {
 
-      UserBuyLotteryResponseDTO buyLotteryResponseDTO = this.userService.buyLottery(userId, ticketId);
+    UserBuyLotteryResponseDTO buyLotteryResponseDTO = this.userService.buyLottery(userId, ticketId);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(buyLotteryResponseDTO);
   }
 
   @GetMapping("/{userId}/lotteries")
-  public ReportLotteriesDTO getReportLotteriesByUserId(@PathVariable("userId")
-                                                         @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
-                                                         @Pattern(regexp = "[0-9]+", message = "userId must be number only")
-                                                         String userId) {
-      return this.userService.reportLotteriesByUserId(userId);
+  public ReportLotteriesDTO getReportLotteriesByUserId(
+      @PathVariable("userId")
+          @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
+          @Pattern(regexp = "[0-9]+", message = "userId must be number only")
+          String userId) {
+    return this.userService.reportLotteriesByUserId(userId);
   }
 }

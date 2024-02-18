@@ -1,11 +1,9 @@
 package com.kbtg.bootcamp.posttest.exceptions;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,21 +38,22 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ApiErrorResponse> handleBadRequest(
-          ConstraintViolationException constraintViolationException, WebRequest webRequest) {
+      ConstraintViolationException constraintViolationException, WebRequest webRequest) {
 
-    List<String> errors = constraintViolationException.getConstraintViolations()
-            .stream().map(ConstraintViolation::getMessage)
+    List<String> errors =
+        constraintViolationException.getConstraintViolations().stream()
+            .map(ConstraintViolation::getMessage)
             .toList();
 
     String message = String.join(", ", errors);
 
     ApiErrorResponse errorResponse =
-            new ApiErrorResponse(
-                    LocalDateTime.now(),
-                    HttpStatus.BAD_REQUEST.value(),
-                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                    message,
-                    webRequest.getDescription(false));
+        new ApiErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            message,
+            webRequest.getDescription(false));
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }

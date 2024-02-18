@@ -17,7 +17,6 @@ import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
 import com.kbtg.bootcamp.posttest.users.repository.UserTicketRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +49,8 @@ public class UserServiceTest {
     when(userRepository.findById(mockUserId)).thenReturn(Optional.of(mockUser));
     when(userTicketRepository.save(mockUserTicket)).thenReturn(mockUserTicketResponse);
 
-    UserBuyLotteryResponseDTO userBuyLotteryResponseDTO = userService.buyLottery(mockUserId, mockTicket);
+    UserBuyLotteryResponseDTO userBuyLotteryResponseDTO =
+        userService.buyLottery(mockUserId, mockTicket);
 
     assertEquals(userBuyLotteryResponseDTO.id(), String.valueOf(mockUserTicketResponse.getId()));
     verify(lotteryService, times(1)).findLotteryByTicketAmountMoreThanZero(mockTicket);
@@ -139,15 +139,16 @@ public class UserServiceTest {
   }
 
   @Test
-  @DisplayName("should get all ticket was bought by userId, count of all lotteries and count all amount")
-  public void testGetAllTicketsByUserId(){
+  @DisplayName(
+      "should get all ticket was bought by userId, count of all lotteries and count all amount")
+  public void testGetAllTicketsByUserId() {
     String mockUserId = "1234567890";
-    List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTOList = List.of(
+    List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTOList =
+        List.of(
             new MockGetAllTicketByUserIdDTO("000001", 80),
             new MockGetAllTicketByUserIdDTO("000001", 80),
             new MockGetAllTicketByUserIdDTO("533704", 80),
-            new MockGetAllTicketByUserIdDTO("533704", 80)
-    );
+            new MockGetAllTicketByUserIdDTO("533704", 80));
 
     User mockUser = new User("0123456789", "a");
 
@@ -156,18 +157,19 @@ public class UserServiceTest {
     int expectedCost = 320;
 
     when(userRepository.findById(mockUserId)).thenReturn(Optional.of(mockUser));
-    when(userTicketRepository.findAllTicketByUserId(mockUserId)).thenReturn(getAllTicketByUserIdDTOList);
+    when(userTicketRepository.findAllTicketByUserId(mockUserId))
+        .thenReturn(getAllTicketByUserIdDTOList);
 
     ReportLotteriesDTO reportLotteriesByUserId = userService.reportLotteriesByUserId(mockUserId);
 
-    assertEquals(reportLotteriesByUserId.tickets(),expectedTickets);
+    assertEquals(reportLotteriesByUserId.tickets(), expectedTickets);
     assertEquals(reportLotteriesByUserId.count(), expectedCount);
     assertEquals(reportLotteriesByUserId.cost(), expectedCost);
   }
 
   @Test
   @DisplayName("should get all ticket by userId, but ticket is empty, amount is 0, price is 0")
-  public void testGetAllTicketsByUserIdEmpty(){
+  public void testGetAllTicketsByUserIdEmpty() {
     String mockUserId = "1234567890";
     List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTOList = new ArrayList<>();
     User mockUser = new User("0123456789", "a");
@@ -177,23 +179,27 @@ public class UserServiceTest {
     int expectedCost = 0;
 
     when(userRepository.findById(mockUserId)).thenReturn(Optional.of(mockUser));
-    when(userTicketRepository.findAllTicketByUserId(mockUserId)).thenReturn(getAllTicketByUserIdDTOList);
+    when(userTicketRepository.findAllTicketByUserId(mockUserId))
+        .thenReturn(getAllTicketByUserIdDTOList);
 
     ReportLotteriesDTO reportLotteriesByUserId = userService.reportLotteriesByUserId(mockUserId);
 
-    assertEquals(reportLotteriesByUserId.tickets(),expectedTickets);
+    assertEquals(reportLotteriesByUserId.tickets(), expectedTickets);
     assertEquals(reportLotteriesByUserId.count(), expectedCount);
     assertEquals(reportLotteriesByUserId.cost(), expectedCost);
   }
 
   @Test
   @DisplayName("should throw not found when get all tickets by user id")
-  public void testGetAllTicketsButUserNotFound(){
+  public void testGetAllTicketsButUserNotFound() {
     String mockUserId = "1234567890";
 
     when(userRepository.findById(mockUserId)).thenReturn(Optional.empty());
 
-    assertThrows(NotFoundException.class, () -> userService.reportLotteriesByUserId(mockUserId), "user not found");
+    assertThrows(
+        NotFoundException.class,
+        () -> userService.reportLotteriesByUserId(mockUserId),
+        "user not found");
     verify(userTicketRepository, never()).findAllTicketByUserId(mockUserId);
   }
 
