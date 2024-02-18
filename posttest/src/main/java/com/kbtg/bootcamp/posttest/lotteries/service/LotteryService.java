@@ -1,5 +1,6 @@
 package com.kbtg.bootcamp.posttest.lotteries.service;
 
+import com.kbtg.bootcamp.posttest.constants.ErrorMessageConstant;
 import com.kbtg.bootcamp.posttest.exceptions.InternalServerException;
 import com.kbtg.bootcamp.posttest.exceptions.NotFoundException;
 import com.kbtg.bootcamp.posttest.lotteries.entity.Lottery;
@@ -51,13 +52,13 @@ public class LotteryService {
     Optional<Lottery> lotteryOptional = this.lotteryRepository.findByTicket(ticket);
 
     if (lotteryOptional.isEmpty()) {
-      throw new NotFoundException("ticket not found");
+      throw new NotFoundException(ErrorMessageConstant.TICKET_NOT_FOUND);
     }
 
     Lottery lottery = lotteryOptional.get();
     boolean isSoldOut = lottery.getAmount() == 0;
     if (isSoldOut) {
-      throw new NotFoundException("ticket sold out");
+      throw new NotFoundException(ErrorMessageConstant.TICKET_SOLD_OUT);
     }
 
     return lottery;
@@ -68,7 +69,7 @@ public class LotteryService {
     Optional<Lottery> lotteryOptional = lotteryRepository.findById(id);
 
     if (lotteryOptional.isEmpty()) {
-      throw new NotFoundException("lottery not found");
+      throw new NotFoundException(ErrorMessageConstant.LOTTERY_NOT_FOUND);
     }
 
     return this.lotteryRepository.save(lottery);

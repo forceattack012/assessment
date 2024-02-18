@@ -1,5 +1,6 @@
 package com.kbtg.bootcamp.posttest.users.service;
 
+import com.kbtg.bootcamp.posttest.constants.ErrorMessageConstant;
 import com.kbtg.bootcamp.posttest.exceptions.InternalServerException;
 import com.kbtg.bootcamp.posttest.exceptions.NotFoundException;
 import com.kbtg.bootcamp.posttest.lotteries.entity.Lottery;
@@ -62,10 +63,7 @@ public class UserService {
   }
 
   public ReportLotteriesDTO reportLotteriesByUserId(String userId) {
-    Optional<User> userOptional = userRepository.findById(userId);
-    if (userOptional.isEmpty()) {
-      throw new NotFoundException("user not found");
-    }
+    findUserByUserId(userId);
 
     List<GetAllTicketByUserIdDTO> getAllTicketByUserIdDTO =
         userTicketRepository.findAllTicketByUserId(userId);
@@ -85,7 +83,7 @@ public class UserService {
         userTickets.stream().findFirst().map(UserTicket::getLottery);
 
     if (lotteryOptional.isEmpty()) {
-      throw new NotFoundException("not found lottery or user");
+      throw new NotFoundException(ErrorMessageConstant.LOTTERY_OR_USER_NOT_FOUND);
     }
 
     Lottery lottery = lotteryOptional.get();
@@ -116,6 +114,6 @@ public class UserService {
   private User findUserByUserId(String userId) {
     return userRepository
         .findById(userId)
-        .orElseThrow(() -> new NotFoundException("user not found"));
+        .orElseThrow(() -> new NotFoundException(ErrorMessageConstant.USER_NOT_FOUND));
   }
 }

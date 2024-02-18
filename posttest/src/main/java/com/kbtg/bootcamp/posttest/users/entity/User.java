@@ -13,8 +13,8 @@ import lombok.Data;
 public class User {
 
   @Id
-  @Pattern(regexp = "[0-9]+")
-  @Size(min = 10, max = 10)
+  @Pattern(regexp = "[0-9]+", message = "must be number only")
+  @Size(min = 10, max = 10, message = "must be at least 10 characters")
   @Column(name = "user_id")
   private String userId;
 

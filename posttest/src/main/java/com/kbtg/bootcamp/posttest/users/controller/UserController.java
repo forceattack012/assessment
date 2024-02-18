@@ -1,5 +1,6 @@
 package com.kbtg.bootcamp.posttest.users.controller;
 
+import com.kbtg.bootcamp.posttest.constants.ErrorMessageConstant;
 import com.kbtg.bootcamp.posttest.users.model.LotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
@@ -26,12 +27,12 @@ public class UserController {
   @PostMapping("/{userId}/lotteries/{ticketId}")
   public ResponseEntity<UserBuyLotteryResponseDTO> buyLottery(
       @PathVariable("userId")
-          @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
-          @Pattern(regexp = "[0-9]+", message = "userId must be number only")
+          @Size(min = 10, max = 10, message = ErrorMessageConstant.USER_ID_MUST_TEN_CH)
+          @Pattern(regexp = "[0-9]+", message = ErrorMessageConstant.USER_ID_MUST_NUMBER)
           String userId,
       @PathVariable("ticketId")
-          @Size(min = 6, max = 6, message = "ticketId must be at least 6 characters")
-          @Pattern(regexp = "[0-9]+", message = "ticketId must be number only")
+          @Size(min = 6, max = 6, message = ErrorMessageConstant.TICKET_ID_MUST_SIX_CH)
+          @Pattern(regexp = "[0-9]+", message = ErrorMessageConstant.TICKET_ID_MUST_NUMBER)
           String ticketId) {
 
     UserBuyLotteryResponseDTO buyLotteryResponseDTO = this.userService.buyLottery(userId, ticketId);
@@ -42,8 +43,8 @@ public class UserController {
   @GetMapping("/{userId}/lotteries")
   public ReportLotteriesDTO getReportLotteriesByUserId(
       @PathVariable("userId")
-          @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
-          @Pattern(regexp = "[0-9]+", message = "userId must be number only")
+          @Size(min = 10, max = 10, message = ErrorMessageConstant.USER_ID_MUST_TEN_CH)
+          @Pattern(regexp = "[0-9]+", message = ErrorMessageConstant.USER_ID_MUST_NUMBER)
           String userId) {
     return this.userService.reportLotteriesByUserId(userId);
   }
@@ -51,12 +52,12 @@ public class UserController {
   @DeleteMapping("/{userId}/lotteries/{ticketId}")
   public LotteryResponseDTO sellLotteryByUserIdAndTicket(
       @PathVariable("userId")
-          @Size(min = 10, max = 10, message = "userId must be at least 10 characters")
-          @Pattern(regexp = "[0-9]+", message = "userId must be number only")
+          @Size(min = 10, max = 10, message = ErrorMessageConstant.USER_ID_MUST_TEN_CH)
+          @Pattern(regexp = "[0-9]+", message = ErrorMessageConstant.USER_ID_MUST_NUMBER)
           String userId,
       @PathVariable("ticketId")
-          @Size(min = 6, max = 6, message = "ticketId must be at least 6 characters")
-          @Pattern(regexp = "[0-9]+", message = "ticketId must be number only")
+          @Size(min = 6, max = 6, message = ErrorMessageConstant.TICKET_ID_MUST_SIX_CH)
+          @Pattern(regexp = "[0-9]+", message = ErrorMessageConstant.TICKET_ID_MUST_NUMBER)
           String ticketId) {
 
     return this.userService.sellLotteryByUserIdAndTicket(userId, ticketId);
