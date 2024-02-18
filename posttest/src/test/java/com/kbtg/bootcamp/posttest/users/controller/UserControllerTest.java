@@ -1,6 +1,9 @@
 package com.kbtg.bootcamp.posttest.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kbtg.bootcamp.posttest.exceptions.NotFoundException;
+import com.kbtg.bootcamp.posttest.users.entity.GetAllTicketByUserIdDTO;
+import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
@@ -29,7 +33,6 @@ public class UserControllerTest {
     private MockMvc mockMvc;
     @Mock
     private UserService userService;
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup(){
@@ -37,7 +40,6 @@ public class UserControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(userController)
                 .alwaysDo(print())
                 .build();
-        objectMapper = new ObjectMapper();
     }
     @Test
     @DisplayName("should buy lottery and return id of transaction")
@@ -53,5 +55,25 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(mockTransactionId)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("should get all lotteries, amount, price was bought")
+    public void testGetAllLotteriesWereBought() throws Exception {
+        String mockUserId = "1234567890";
+        List<String> mockTickets = List.of("000001", "000002", "123456");
+        int cost = 240;
+        int count = 3;
+        ReportLotteriesDTO reportLotteriesDTO = new ReportLotteriesDTO(mockTickets, count, cost);
+
+        when(userService.reportLotteriesByUserId(mockUserId)).thenReturn(reportLotteriesDTO);
+
+        String urlReport = String.format("/users/%s/lotteries", mockUserId);
+        this.mockMvc.perform(get(urlReport)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.tickets", is(mockTickets)))
+                .andExpect(jsonPath("$.count", is(count)))
+                .andExpect(jsonPath("$.cost", is(cost)))
+                .andExpect(status().isOk());
     }
 }

@@ -44,7 +44,7 @@ public class LotteryRequestDTOTest {
     var violations = validator.validate(ticketRequestDTO);
 
     Iterator<ConstraintViolation<TicketRequestDTO>> iterator = violations.iterator();
-    assertThat(iterator.next().getMessage()).isEqualTo("Ticket must be 6 characters only");
+    assertThat(iterator.next().getMessage()).isEqualTo("must be 6 characters only");
 
     dummyTicket = "123";
     ticketRequestDTO = new TicketRequestDTO(dummyTicket, 80, 1);
@@ -52,7 +52,7 @@ public class LotteryRequestDTOTest {
     violations = validator.validate(ticketRequestDTO);
 
     iterator = violations.iterator();
-    assertThat(iterator.next().getMessage()).isEqualTo("Ticket must be 6 characters only");
+    assertThat(iterator.next().getMessage()).isEqualTo("must be 6 characters only");
   }
 
   @Test
@@ -63,7 +63,7 @@ public class LotteryRequestDTOTest {
     var violations = validator.validate(ticketRequestDTO);
 
     Iterator<ConstraintViolation<TicketRequestDTO>> iterator = violations.iterator();
-    assertThat(iterator.next().getMessage()).isEqualTo("Ticket is required");
+    assertThat(iterator.next().getMessage()).isEqualTo("is required");
   }
 
   @Test
