@@ -1,3 +1,7 @@
+# USER ID
+````
+  userId : ["0123456789", "1123456789"]
+````
 # ระบบย่อยซื้อลอตเตอรี่
 แอพพลิเคชั่นธนาคารต้องการเพิ่มฟีเจอร์ให้ผู้ใช้งานสามารถซื้อลอตเตอรี่ได้ เพื่อตอบสนองกลุ่มนักเสี่ยงโชคยุคใหม่ที่ต้องการความสะดวก และไม่ต้องกังวลเรื่องการจัดเก็บลอตเตอรี่ไว้กับตัวเอง รวมทั้งการขึ้นเงินก็สามารถทำผ่านแอพพลิเคชั่นได้อย่างง่ายดาย
 
@@ -61,6 +65,9 @@
 #### Technical Details: EXP03
 * POST /users/:userId/lotteries/:ticketId
 * userId และ ticketId เป็นค่าที่ผู้ใช้ป้อนเข้ามา
+* ````
+  userId : ["0123456789", "1123456789"]
+  ````
 * Response Body
 ```json
 {
@@ -73,6 +80,9 @@
 	* As a user, I want to list all my lottery lottery So that I can see which one I have already bought and it cost
 	* ในฐานะผู้ใช้ ฉันต้องการดูรายการลอตเตอรี่ทั้งหมดที่เคยซื้อ
 #### Technical Details: EXP04
+````
+  userId : ["0123456789", "1123456789"]
+````
 ```mermaid
 sequenceDiagram
     Client->>+API Server: call GET /users/:userId/lotteries
@@ -89,6 +99,9 @@ sequenceDiagram
 * DELETE /users/:userId/lotteries/:ticketId
 * userId และ ticketId เป็นค่าที่ผู้ใช้ป้อนเข้ามา
 * Response Body
+````
+  userId : ["0123456789", "1123456789"]
+````
 ```json
 {
 	"lottery": "000001",
