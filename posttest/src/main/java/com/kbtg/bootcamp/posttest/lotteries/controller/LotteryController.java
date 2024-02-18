@@ -4,6 +4,7 @@ import com.kbtg.bootcamp.posttest.lotteries.model.TicketListResponseDTO;
 import com.kbtg.bootcamp.posttest.lotteries.model.TicketNameResponseDTO;
 import com.kbtg.bootcamp.posttest.lotteries.model.TicketRequestDTO;
 import com.kbtg.bootcamp.posttest.lotteries.service.LotteryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ public class LotteryController {
   }
 
   @PostMapping("/admin/lotteries")
+  @SecurityRequirement(name = "basicAuth")
   public ResponseEntity<TicketNameResponseDTO> createTicket(
       @RequestBody @Validated TicketRequestDTO ticketRequestDTO) {
     TicketNameResponseDTO ticketNameResponseDTO =
