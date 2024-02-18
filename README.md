@@ -22,7 +22,7 @@
 
 ## User Stories
 ### Story: EXP01
-	* As an admin, I want to add a new lottery ticket So that I can have a lottery store
+	* As an admin, I want to add a new lottery lottery So that I can have a lottery store
 	* ในฐานะผู้ดูแลระบบ ฉันต้องการเพิ่มใบลอตเตอรี่ เพื่อที่จะสร้างคลังเก็บลอตเตอรี่
 #### Technical Details: EXP01
 * POST /admin/lotteries
@@ -30,7 +30,7 @@
 * Request Body
 ```json
 {
-	"ticket": "123456",
+	"lottery": "123456",
 	"price": 80,
 	"amount": 1
 }
@@ -38,13 +38,13 @@
 * Response Body
 ```json
 {
-	"ticket": "123456"
+	"lottery": "123456"
 }
 ```
 
 
 ### Story: EXP02
-	* As a user, I want a list all lottery ticket So that I can pick what I want to buy
+	* As a user, I want a list all lottery lottery So that I can pick what I want to buy
 	* ในฐานะผู้ใช้ ฉันต้องการดูรายการลอตเตอรี่ทั้งหมด เพิื่อจะได้เลือกซื้อ
 #### Technical Details: EXP02
 * GET /lotteries
@@ -56,7 +56,7 @@
 ```
 
 ### Story: EXP03
-	* As a user, I want to buy a lottery ticket So that I can get a change to win
+	* As a user, I want to buy a lottery lottery So that I can get a change to win
 	* ในฐานะผู้ใช้ ฉันต้องการซื้อลอตเตอรี่ เพื่อที่จะได้ลุ้นถูกหวย
 #### Technical Details: EXP03
 * POST /users/:userId/lotteries/:ticketId
@@ -70,20 +70,20 @@
 โดย id มาจาก ID ของตาราง `user_ticket`
 
 ### Story: EXP04
-	* As a user, I want to list all my lottery ticket So that I can see which one I have already bought and it cost
+	* As a user, I want to list all my lottery lottery So that I can see which one I have already bought and it cost
 	* ในฐานะผู้ใช้ ฉันต้องการดูรายการลอตเตอรี่ทั้งหมดที่เคยซื้อ
 #### Technical Details: EXP04
 ```mermaid
 sequenceDiagram
     Client->>+API Server: call GET /users/:userId/lotteries
-    API Server->>+Database: get all lottery ticket by user
+    API Server->>+Database: get all lottery lottery by user
     API Server->>+API Server: calculate total price
-    API Server->>+API Server: count of total lottery ticket
-    API Server-->>Client: return JSON body <br/> tickets = list of ticket e.g.  ["000001","000002","123456"] <br/> count = number <br/> cost = number
+    API Server->>+API Server: count of total lottery lottery
+    API Server-->>Client: return JSON body <br/> tickets = list of lottery e.g.  ["000001","000002","123456"] <br/> count = number <br/> cost = number
 ```
 
 ### Story: EXP05
-	* As a user, I want to sell back my lottery ticket So that I can get my money back
+	* As a user, I want to sell back my lottery lottery So that I can get my money back
 	* ในฐานะผู้ใช้ ฉันต้องการขายคืนลอตเตอรี่เพื่อได้เงินคืน
 #### Technical Details: EXP05
 * DELETE /users/:userId/lotteries/:ticketId
@@ -91,7 +91,7 @@ sequenceDiagram
 * Response Body
 ```json
 {
-	"ticket": "000001",
+	"lottery": "000001",
 }
 ```
 
