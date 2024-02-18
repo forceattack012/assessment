@@ -13,6 +13,7 @@ import com.kbtg.bootcamp.posttest.lotteries.service.LotteryService;
 import com.kbtg.bootcamp.posttest.users.entity.GetAllTicketByUserIdDTO;
 import com.kbtg.bootcamp.posttest.users.entity.User;
 import com.kbtg.bootcamp.posttest.users.entity.UserTicket;
+import com.kbtg.bootcamp.posttest.users.model.LotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
@@ -201,6 +202,48 @@ public class UserServiceTest {
         () -> userService.reportLotteriesByUserId(mockUserId),
         "user not found");
     verify(userTicketRepository, never()).findAllTicketByUserId(mockUserId);
+  }
+
+  @Test
+  @DisplayName("should sell lotteries and return lottery")
+  public void testSellLottery() {
+    String mockUserId = "0123456789";
+    String mockTicket = "123456";
+    User mockUser = new User(mockUserId, "A1");
+    Lottery mockLottery = new Lottery(1L, mockTicket, 80, 1);
+    List<UserTicket> userTickets =
+        List.of(new UserTicket(1, mockUser, mockLottery), new UserTicket(2, mockUser, mockLottery));
+
+    Lottery mockUpdateLottery = new Lottery(1L, mockTicket, 80, 3);
+
+    when(this.userTicketRepository.findByUserIdAndTicket(mockUserId, mockTicket))
+        .thenReturn(userTickets);
+    when(this.lotteryService.update(1L, mockUpdateLottery)).thenReturn(mockUpdateLottery);
+    doNothing().when(this.userTicketRepository).deleteByUserIdAndTicket(mockUserId, mockTicket);
+
+    LotteryResponseDTO lotteryResponseDTO =
+        this.userService.sellLotteryByUserIdAndTicket(mockUserId, mockTicket);
+
+    assertEquals(lotteryResponseDTO.lottery(), mockTicket);
+  }
+
+  @Test
+  @DisplayName("should sell lotteries fail")
+  public void testSellLotteryFail() {
+    String mockUserId = "0123456789";
+    String mockTicket = "123456";
+    List<UserTicket> userTickets = new ArrayList<>();
+
+    when(this.userTicketRepository.findByUserIdAndTicket(mockUserId, mockTicket))
+        .thenReturn(userTickets);
+
+    assertThrows(
+        NotFoundException.class,
+        () -> this.userService.sellLotteryByUserIdAndTicket(mockUserId, mockTicket),
+        "not found lottery or user");
+    verify(this.userTicketRepository, times(1)).findByUserIdAndTicket(mockUserId, mockTicket);
+    verify(this.lotteryService, never()).update(anyLong(), any());
+    verify(this.userTicketRepository, never()).deleteByUserIdAndTicket(mockUserId, mockTicket);
   }
 
   public static class MockGetAllTicketByUserIdDTO implements GetAllTicketByUserIdDTO {
