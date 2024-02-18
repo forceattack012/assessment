@@ -1,0 +1,1 @@
+./gradlew spotlessCheck spotlessApply test
