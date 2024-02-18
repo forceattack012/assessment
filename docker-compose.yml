@@ -9,8 +9,30 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - ./posttest_init.sql:/docker-entrypoint-initdb.d/posttest_init.sql
+    networks:
+      - assessment
     ports:
       - "5432:5432"
 
+  assessment:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8081"
+    environment:
+      - spring.profiles.active=dev
+      - server.port=8081
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/posttest
+      - DATABASE_USERNAME=user
+      - DATABASE_PASSWORD=password
+    networks:
+      - assessment
+    depends_on:
+      - postgres
+
 volumes:
   pgdata:
+
+networks:
+  assessment:

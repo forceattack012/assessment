@@ -22,6 +22,10 @@ CREATE TABLE user_ticket(
     FOREIGN KEY(ticket) REFERENCES lotteries(ticket) ON DELETE CASCADE
 );
 
+CREATE INDEX index_lotteries_ticket ON lotteries (ticket);
+CREATE INDEX index_users_id ON users (user_id);
+CREATE INDEX index_user_ticket ON user_ticket (user_id, ticket);
+
 INSERT INTO lotteries(ticket, price, amount) VALUES('000001', 80, 1);
 INSERT INTO lotteries(ticket, price, amount) VALUES('000002', 80, 1);
 
