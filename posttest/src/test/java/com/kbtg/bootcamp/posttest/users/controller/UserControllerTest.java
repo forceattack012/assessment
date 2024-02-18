@@ -2,12 +2,12 @@ package com.kbtg.bootcamp.posttest.users.controller;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.kbtg.bootcamp.posttest.users.model.LotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.service.UserService;
@@ -67,6 +67,23 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.tickets", is(mockTickets)))
         .andExpect(jsonPath("$.count", is(count)))
         .andExpect(jsonPath("$.cost", is(cost)))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("should sell lottery and return ticket")
+  public void testSellLottery() throws Exception {
+    String mockUserId = "1234567890";
+    String mockTicket = "000001";
+    LotteryResponseDTO mockLotteryResponseDTO = new LotteryResponseDTO(mockTicket);
+
+    when(userService.sellLotteryByUserIdAndTicket(mockUserId, mockTicket))
+        .thenReturn(mockLotteryResponseDTO);
+
+    String pathSellLottery = String.format("/users/%s/lotteries/%s", mockUserId, mockTicket);
+    this.mockMvc
+        .perform(delete(pathSellLottery).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.lottery", is(mockLotteryResponseDTO.lottery())))
         .andExpect(status().isOk());
   }
 }

@@ -7,6 +7,7 @@ import com.kbtg.bootcamp.posttest.lotteries.service.LotteryService;
 import com.kbtg.bootcamp.posttest.users.entity.GetAllTicketByUserIdDTO;
 import com.kbtg.bootcamp.posttest.users.entity.User;
 import com.kbtg.bootcamp.posttest.users.entity.UserTicket;
+import com.kbtg.bootcamp.posttest.users.model.LotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.model.ReportLotteriesDTO;
 import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
@@ -75,6 +76,33 @@ public class UserService {
     int totalPrice = calculateTotalPriceOfLotteries(getAllTicketByUserIdDTO);
 
     return new ReportLotteriesDTO(tickets, count, totalPrice);
+  }
+
+  @Transactional
+  public LotteryResponseDTO sellLotteryByUserIdAndTicket(String userId, String ticket) {
+    List<UserTicket> userTickets = this.userTicketRepository.findByUserIdAndTicket(userId, ticket);
+    Optional<Lottery> lotteryOptional =
+        userTickets.stream().findFirst().map(UserTicket::getLottery);
+
+    if (lotteryOptional.isEmpty()) {
+      throw new NotFoundException("not found lottery or user");
+    }
+
+    Lottery lottery = lotteryOptional.get();
+
+    try {
+      int countTickets = userTickets.size();
+      int newAmount = lottery.getAmount() + countTickets;
+      lottery.setAmount(newAmount);
+
+      this.lotteryService.update(lottery.getId(), lottery);
+
+      this.userTicketRepository.deleteByUserIdAndTicket(userId, ticket);
+    } catch (Exception exception) {
+      throw new InternalServerException(exception.getMessage());
+    }
+
+    return new LotteryResponseDTO(ticket);
   }
 
   private int calculateTotalPriceOfLotteries(
