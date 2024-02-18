@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
       - name: Run Linter
-        run: ./gradlew spotlessCheck
+        run: cd ./posttest && ./gradlew spotlessCheck
 
   unit-test:
     name: Run Unit Test
@@ -35,4 +35,4 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
       - name: Run Unit test
-        run: ./gradlew test
+        run: cd ./posttest && ./gradlew test
