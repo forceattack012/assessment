@@ -6,6 +6,7 @@ import com.kbtg.bootcamp.posttest.lotteries.entity.Lottery;
 import com.kbtg.bootcamp.posttest.lotteries.service.LotteryService;
 import com.kbtg.bootcamp.posttest.users.entity.User;
 import com.kbtg.bootcamp.posttest.users.entity.UserTicket;
+import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
 import com.kbtg.bootcamp.posttest.users.repository.UserTicketRepository;
 import jakarta.transaction.Transactional;
@@ -29,12 +30,11 @@ public class UserService {
   }
 
   @Transactional
-  public String buyLottery(String userId, String ticket) {
+  public UserBuyLotteryResponseDTO buyLottery(String userId, String ticket) {
     String id;
 
     try {
       User user = findUserByUserId(userId);
-
       Lottery lottery = lotteryService.findLotteryByTicketAmountMoreThanZero(ticket);
 
       int reduceAmount = lottery.getAmount() - 1;
@@ -53,7 +53,7 @@ public class UserService {
       throw new InternalServerException(ex.getMessage());
     }
 
-    return id;
+    return new UserBuyLotteryResponseDTO(id);
   }
 
   private User findUserByUserId(String userId) {

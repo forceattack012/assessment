@@ -122,4 +122,32 @@ public class LotteryServiceTest {
         () -> lotteryService.findLotteryByTicketAmountMoreThanZero(mockTicket),
         "ticket sold out");
   }
+
+  @Test
+  @DisplayName("should update lottery success")
+  public void testUpdateLottery(){
+    long mockTicketId = 1L;
+    Lottery mockLottery = new Lottery(1L, "123456", 80, 1);
+
+    when(lotteryRepository.findById(mockTicketId)).thenReturn(Optional.of(mockLottery));
+    when(lotteryRepository.save(any())).thenReturn(mockLottery);
+
+    Lottery actualLottery = lotteryService.update(mockTicketId, mockLottery);
+
+    assertEquals(actualLottery, mockLottery);
+  }
+
+  @Test
+  @DisplayName("should update lottery fail because not found")
+  public void testUpdateLotteryFail(){
+    long mockTicketId = 1L;
+    Lottery mockLottery = new Lottery(1L, "123456", 80, 1);
+
+    when(lotteryRepository.findById(mockTicketId)).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () ->  lotteryService.update(mockTicketId, mockLottery), "lottery not found");
+
+    verify(lotteryRepository, times(1)).findById(mockTicketId);
+    verify(lotteryRepository, never()).save(any());
+  }
 }

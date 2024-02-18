@@ -1,11 +1,14 @@
 package com.kbtg.bootcamp.posttest.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 public class ApiErrorResponse {
   private LocalDateTime timestamp;
   private int status;
   private String error;
+  @JsonProperty("error_message")
   private String errorMessage;
   private String path;
 

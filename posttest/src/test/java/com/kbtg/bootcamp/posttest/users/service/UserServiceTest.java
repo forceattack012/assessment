@@ -12,6 +12,7 @@ import com.kbtg.bootcamp.posttest.lotteries.entity.Lottery;
 import com.kbtg.bootcamp.posttest.lotteries.service.LotteryService;
 import com.kbtg.bootcamp.posttest.users.entity.User;
 import com.kbtg.bootcamp.posttest.users.entity.UserTicket;
+import com.kbtg.bootcamp.posttest.users.model.UserBuyLotteryResponseDTO;
 import com.kbtg.bootcamp.posttest.users.repository.UserRepository;
 import com.kbtg.bootcamp.posttest.users.repository.UserTicketRepository;
 import java.util.Optional;
@@ -44,9 +45,9 @@ public class UserServiceTest {
     when(userRepository.findById(mockUserId)).thenReturn(Optional.of(mockUser));
     when(userTicketRepository.save(mockUserTicket)).thenReturn(mockUserTicketResponse);
 
-    String actualId = userService.buyLottery(mockUserId, mockTicket);
+    UserBuyLotteryResponseDTO userBuyLotteryResponseDTO = userService.buyLottery(mockUserId, mockTicket);
 
-    assertEquals(actualId, String.valueOf(mockUserTicketResponse.getId()));
+    assertEquals(userBuyLotteryResponseDTO.id(), String.valueOf(mockUserTicketResponse.getId()));
     verify(lotteryService, times(1)).findLotteryByTicketAmountMoreThanZero(mockTicket);
     verify(userRepository, times(1)).findById(mockUserId);
 
