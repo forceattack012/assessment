@@ -2,7 +2,11 @@ package com.kbtg.bootcamp.posttest.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class ApiErrorResponse {
   private LocalDateTime timestamp;
   private int status;
@@ -19,46 +23,6 @@ public class ApiErrorResponse {
     this.status = status;
     this.error = error;
     this.errorMessage = errorMessage;
-    this.path = path;
-  }
-
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public int getStatus() {
-    return status;
-  }
-
-  public void setStatus(int status) {
-    this.status = status;
-  }
-
-  public String getError() {
-    return error;
-  }
-
-  public void setError(String error) {
-    this.error = error;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
     this.path = path;
   }
 }
