@@ -1,11 +1,9 @@
 package com.kbtg.bootcamp.posttest.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Setter
 @Getter
