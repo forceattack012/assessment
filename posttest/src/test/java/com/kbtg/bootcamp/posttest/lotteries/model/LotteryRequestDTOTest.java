@@ -74,8 +74,6 @@ public class LotteryRequestDTOTest {
 
     var violations = validator.validate(ticketRequestDTO);
 
-    Iterator<ConstraintViolation<TicketRequestDTO>> iterator = violations.iterator();
-
     assertThat(violations).hasSize(3);
   }
 }
